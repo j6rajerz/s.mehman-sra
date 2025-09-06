@@ -1,0 +1,9 @@
+{
+  "users": [
+    { "username": "abbas", "password": "1335", "role": "manager" },
+    { "username": "saraidar1", "password": "1111", "role": "caretaker", "guesthouse": "تهران" },
+    { "username": "saraidar2", "password": "2222", "role": "caretaker", "guesthouse": "اصفهان" }
+  ],
+  "reservations": []
+}
+

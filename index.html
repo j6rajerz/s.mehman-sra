@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه رزرو مهمانسرا</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- صفحه لاگین -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h2 class="login-header neon-text">ورود به سامانه</h2>
+            <div class="form-group">
+                <label for="username">نام کاربری</label>
+                <input type="text" id="username" placeholder="نام کاربری خود را وارد کنید">
+            </div>
+            <div class="form-group">
+                <label for="password">رمز عبور</label>
+                <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید">
+            </div>
+            <button class="btn-primary" style="width: 100%;" id="loginBtn">ورود</button>
+            <div id="loginError" style="color: #ff3366; margin-top: 15px; text-align: center; display: none;">
+                نام کاربری یا رمز عبور اشتباه است
+            </div>
+        </div>
+    </div>
+
+    <!-- پنل اصلی -->
+    <div id="mainPanel" style="display: none;">
+        <header>
+            <div class="container header-content">
+                <div class="logo">سامانه رزرو مهمانسرا</div>
+                <div class="user-info">
+                    <span id="userRoleDisplay"></span>
+                    <button class="btn-secondary" id="logoutBtn">خروج</button>
+                </div>
+            </div>
+            
+            <div class="container">
+                <nav id="managerNav" style="display: none;">
+                    <ul class="menu">
+                        <li class="menu-item active" data-section="dashboard">داشبورد</li>
+                        <li class="menu-item" data-section="reservation">ثبت رزرو</li>
+                        <li class="menu-item" data-section="letters">نامه‌های ارسالی</li>
+                        <li class="menu-item" data-section="settings">تنظیمات</li>
+                        <li class="menu-item" data-section="reports">گزارش‌ها</li>
+                        <li class="menu-item" data-section="calendar">تقویم رزرو</li>
+                        <li class="menu-item" data-section="archive">بایگانی</li>
+                    </ul>
+                </nav>
+                <nav id="caretakerNav" style="display: none;">
+                    <ul class="menu">
+                        <li class="menu-item active" data-section="caretakerDashboard">درخواست‌های دریافتی</li>
+                        <li class="menu-item" data-section="guesthouseStatus">وضعیت مهمانسرا</li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- Manager Sections -->
+            <div id="managerSections">
+                <!-- داشبورد -->
+                <section id="dashboard" class="section active">
+                    <div class="card">
+                        <h3 class="card-header">خلاصه وضعیت</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                            <div style="background: linear-gradient(135deg, rgba(8, 247, 254, 0.1), rgba(254, 83, 187, 0.1)); padding: 15px; border-radius: 8px;">
+                                <h4>رزروهای فعال</h4>
+                                <p id="activeReservations" style="font-size: 24px; margin-top: 10px;">۰</p>
+                            </div>
+                            <div style="background: linear-gradient(135deg, rgba(8, 247, 254, 0.1), rgba(254, 83, 187, 0.1)); padding: 15px; border-radius: 8px;">
+                                <h4>تعداد مهمانان</h4>
+                                <p id="totalGuests" style="font-size: 24px; margin-top: 10px;">۰</p>
+                            </div>
+                            <div style="background: linear-gradient(135deg, rgba(8, 247, 254, 0.1), rgba(254, 83, 187, 0.1)); padding: 15px; border-radius: 8px;">
+                                <h4>مهمانسراهای فعال</h4>
+                                <p id="activeGuesthouses" style="font-size: 24px; margin-top: 10px;">۰</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-header">وضعیت سرایدارها</h3>
+                        <table id="caretakerStatusTable">
+                            <thead>
+                                <tr>
+                                    <th>نام سرایدار</th>
+                                    <th>مهمانسرا</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ثبت رزرو -->
+                <section id="reservation" class="section">
+                    <div class="card">
+                        <h3 class="card-header">ثبت درخواست رزرو جدید</h3>
+                        <form id="reservationForm">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                <div class="form-group">
+                                    <label for="guestName">نام و نام خانوادگی مهمان</label>
+                                    <input type="text" id="guestName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="guestCount">تعداد نفرات</label>
+                                    <input type="number" id="guestCount" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="suiteNumber">شماره سوئیت</label>
+                                    <input type="text" id="suiteNumber" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="guesthouse">مهمانسرا</label>
+                                    <select id="guesthouse" required>
+                                        <option value="">انتخاب کنید</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="checkinDate">تاریخ ورود (شمسی)</label>
+                                    <input type="text" id="checkinDate" placeholder="1402/01/15" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="checkoutDate">تاریخ خروج (شمسی)</label>
+                                    <input type="text" id="checkoutDate" placeholder="1402/01/17" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="checkinTime">ساعت ورود</label>
+                                    <input type="time" id="checkinTime" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="checkoutTime">ساعت خروج</label>
+                                    <input type="time" id="checkoutTime" required>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-primary" style="margin-top: 20px;" id="generateLetterBtn">ثبت و تولید نامه</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- نامه‌های ارسالی -->
+                <section id="letters" class="section">
+                    <div class="card">
+                        <h3 class="card-header">نامه‌های ارسالی</h3>
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <input type="text" placeholder="جستجو بر اساس نام مهمان">
+                            <input type="text" placeholder="تاریخ شروع (شمسی)" style="width: 150px;">
+                            <input type="text" placeholder="تاریخ پایان (شمسی)" style="width: 150px;">
+                            <button class="btn-primary">جستجو</button>
+                            <button class="btn-secondary">خروجی Excel</button>
+                        </div>
+                        <table id="lettersTable">
+                            <thead>
+                                <tr>
+                                    <th>نام مهمان</th>
+                                    <th>تاریخ رزرو</th>
+                                    <th>شماره سوئیت</th>
+                                    <th>مهمانسرا</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be populated by JS -->
+                            </tbody>
+                        </table>
+                        <div class="pagination">
+                            <!-- Pagination will be generated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- سایر بخش‌ها -->
+                <section id="settings" class="section">
+                    <div class="card">
+                        <h3 class="card-header">تنظیمات عمومی</h3>
+                        <div class="form-group">
+                            <label for="managerNameInput">نام مدیر</label>
+                            <input type="text" id="managerNameInput" placeholder="نام کامل مدیر">
+                        </div>
+                        <div class="form-group">
+                            <label for="managerContactInput">شماره تماس</label>
+                            <input type="text" id="managerContactInput" placeholder="شماره تماس مدیر">
+                        </div>
+                        <div class="form-group">
+                            <label for="locationUrlInput">لینک لوکیشن مهمانسرا (برای QR Code)</label>
+                            <input type="url" id="locationUrlInput" placeholder="https://maps.google.com/...">
+                        </div>
+                        <button class="btn-primary" id="saveGeneralSettingsBtn">ذخیره تنظیمات</button>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-header">آپلود مهر و امضا</h3>
+                        <div class="form-group">
+                            <label for="signatureUpload">فایل امضا (PNG)</label>
+                            <input type="file" id="signatureUpload" accept="image/png">
+                        </div>
+                        <div class="form-group">
+                            <label for="stampUpload">فایل مهر (PNG)</label>
+                            <input type="file" id="stampUpload" accept="image/png">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-header">تغییر رمز عبور</h3>
+                        <div class="form-group">
+                            <label for="userToChangePass">انتخاب کاربر</label>
+                            <select id="userToChangePass"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPasswordInput">رمز عبور جدید</label>
+                            <input type="password" id="newPasswordInput" placeholder="رمز عبور جدید را وارد کنید">
+                        </div>
+                        <button class="btn-secondary" id="changePasswordBtn">تغییر رمز</button>
+                    </div>
+                </section>
+
+                <section id="reports" class="section">
+                    <div class="card">
+                        <h3 class="card-header">گزارش‌گیری پیشرفته</h3>
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                            <input type="text" id="reportGuestName" placeholder="نام مهمان">
+                            <select id="reportGuesthouse">
+                                <option value="">همه مهمانسراها</option>
+                            </select>
+                            <input type="text" id="reportDateFrom" placeholder="از تاریخ (مثال: 1402/01/01)">
+                            <input type="text" id="reportDateTo" placeholder="تا تاریخ (مثال: 1402/01/31)">
+                            <button class="btn-primary" id="filterReportsBtn">اعمال فیلتر</button>
+                            <button class="btn-secondary" id="exportExcelBtn">خروجی Excel</button>
+                        </div>
+                        <div id="reportDashboard" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                            <!-- Report stats will be populated here -->
+                        </div>
+                        <table id="reportsTable">
+                            <thead>
+                                <tr>
+                                    <th>نام مهمان</th>
+                                    <th>مهمانسرا</th>
+                                    <th>تاریخ ورود</th>
+                                    <th>تاریخ خروج</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Filtered results will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="calendar" class="section">
+                    <div class="card">
+                        <h3 class="card-header">تقویم رزروها</h3>
+                        <div id="calendarControls" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                            <button id="prevMonthBtn">< ماه قبل</button>
+                            <h4 id="currentMonthDisplay"></h4>
+                            <button id="nextMonthBtn">ماه بعد ></button>
+                        </div>
+                        <div id="calendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center;">
+                            <!-- Calendar will be generated here -->
+                        </div>
+                    </div>
+                </section>
+
+                <section id="archive" class="section">
+                    <div class="card">
+                        <h3 class="card-header">بایگانی نامه‌ها</h3>
+                        <p>این بخش برای دسترسی به نامه‌های بایگانی شده است.</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Caretaker Sections -->
+            <div id="caretakerSections" style="display: none;">
+                <section id="caretakerDashboard" class="section">
+                    <div class="card">
+                        <h3 class="card-header">درخواست‌های رزرو دریافتی</h3>
+                        <table id="caretakerReservationsTable">
+                            <thead>
+                                <tr>
+                                    <th>نام مهمان</th>
+                                    <th>شماره سوئیت</th>
+                                    <th>تاریخ ورود</th>
+                                    <th>تاریخ خروج</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section id="guesthouseStatus" class="section">
+                    <div class="card">
+                        <h3 class="card-header">ثبت وضعیت مهمانسرا</h3>
+                        <form id="statusForm">
+                            <div class="form-group">
+                                <label>وضعیت سکونت</label>
+                                <select id="occupancyStatus">
+                                    <option value="occupied">سکونت</option>
+                                    <option value="vacant">غیرسکونت</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>وضعیت لامپ‌ها</label>
+                                <input type="text" id="lightsStatus" placeholder="مثال: همه سالم">
+                            </div>
+                            <div class="form-group">
+                                <label>وضعیت آب</label>
+                                <input type="text" id="waterStatus" placeholder="مثال: فشار مناسب">
+                            </div>
+                            <div class="form-group">
+                                <label>وضعیت نظافت</label>
+                                <input type="text" id="cleaningStatus" placeholder="مثال: تمیز">
+                            </div>
+                            <div class="form-group">
+                                <label>وضعیت امکانات</label>
+                                <textarea id="facilitiesStatus" placeholder="توضیحات بیشتر..."></textarea>
+                            </div>
+                            <button type="button" class="btn-primary" id="saveStatusBtn">ثبت وضعیت</button>
+                        </form>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Letter Generation Modal -->
+            <div id="letterPreview" class="section">
+                <div class="card">
+                    <h3 class="card-header">پیش‌نمایش معرفی‌نامه</h3>
+                    <div id="letterContent" style="padding: 20px; border: 1px solid #ccc; background: #fff; color: #000;">
+                        <h4 style="text-align: center;">به نام خدا</h4>
+                        <h5 style="text-align: center;">معرفی‌نامه اقامت</h5>
+                        <p id="letterText" style="line-height: 2;"></p>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px;">
+                            <div id="qrBox"></div>
+                            <div>
+                                <p>مدیر: <span id="managerName"></span></p>
+                                <img id="signaturePreview" src="" alt="Signature" style="height: 50px; display: none;">
+                                <img id="stampPreview" src="" alt="Stamp" style="height: 60px; display: none;">
+                            </div>
+                        </div>
+                    </div>
+                    <button id="downloadLetterBtn" class="btn-primary" style="margin-top: 20px;">دانلود نامه (JPG)</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="js/app.js" defer></script>
+</body>
+</html>

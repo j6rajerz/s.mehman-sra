@@ -1,0 +1,271 @@
+:root {
+    --neon-primary: #08f7fe;
+    --neon-secondary: #fe53bb;
+    --neon-accent: #f5d300;
+    --dark-bg: #0a0a0a;
+    --dark-card: rgba(18, 18, 18, 0.7); /* Glass effect */
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: var(--dark-bg) url('https://www.transparenttextures.com/patterns/dark-matter.png');
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* --- Header --- */
+header {
+    background-color: rgba(18, 18, 18, 0.8);
+    padding: 15px 0;
+    border-bottom: 1px solid var(--neon-primary);
+    box-shadow: 0 0 15px var(--neon-primary);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--neon-primary), 0 0 10px var(--neon-primary);
+    color: var(--text-primary);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* --- Navigation Menu --- */
+nav {
+    margin-top: 15px;
+}
+
+.menu {
+    display: flex;
+    list-style: none;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.menu-item {
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    text-shadow: 0 0 2px var(--neon-secondary);
+}
+
+.menu-item:hover {
+    border-color: var(--neon-secondary);
+    box-shadow: 0 0 8px var(--neon-secondary);
+    transform: translateY(-2px);
+}
+
+.menu-item.active {
+    background-color: rgba(254, 83, 187, 0.2);
+    border-color: var(--neon-secondary);
+    box-shadow: 0 0 12px var(--neon-secondary);
+    font-weight: bold;
+}
+
+/* --- Cards (Glass Effect) --- */
+.card {
+    background-color: var(--dark-card);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 20px rgba(8, 247, 254, 0.15);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+.card-header {
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(8, 247, 254, 0.3);
+    color: var(--neon-primary);
+    text-shadow: 0 0 4px var(--neon-primary);
+}
+
+/* --- Forms --- */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.4);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--neon-primary);
+    box-shadow: 0 0 10px var(--neon-primary);
+}
+
+/* --- Buttons with Animation --- */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background-color: var(--neon-primary);
+    color: black;
+    box-shadow: 0 0 5px var(--neon-primary), 0 0 10px var(--neon-primary);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 0 15px var(--neon-primary), 0 0 25px var(--neon-primary);
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background-color: var(--neon-secondary);
+    color: white;
+    box-shadow: 0 0 5px var(--neon-secondary), 0 0 10px var(--neon-secondary);
+}
+
+.btn-secondary:hover {
+    box-shadow: 0 0 15px var(--neon-secondary), 0 0 25px var(--neon-secondary);
+    transform: scale(1.05);
+}
+
+/* --- Login Page --- */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 10px;
+    background-color: var(--dark-card);
+    border: 1px solid var(--neon-primary);
+    box-shadow: 0 0 25px var(--neon-primary);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: var(--neon-primary);
+    text-shadow: 0 0 5px var(--neon-primary);
+}
+
+/* --- Tables --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 15px;
+    text-align: right;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: rgba(8, 247, 254, 0.1);
+    color: var(--neon-primary);
+    font-size: 16px;
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+td i {
+    cursor: pointer;
+    margin-left: 10px;
+    transition: color 0.3s;
+}
+td i.fa-eye:hover { color: var(--neon-primary); }
+td i.fa-edit:hover { color: var(--neon-accent); }
+td i.fa-trash:hover { color: var(--neon-secondary); }
+
+
+/* --- Utility Classes --- */
+.hidden {
+    display: none !important;
+}
+
+.section {
+    display: none; /* Initially hide all sections */
+}
+
+.section.active {
+    display: block; /* Show active section */
+}
+
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .menu {
+        flex-direction: column;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    table {
+        font-size: 14px;
+    }
+}
