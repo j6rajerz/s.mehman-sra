@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه رزرو مهمانسرا</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-primary: #08f7fe;
+            --neon-secondary: #fe53bb;
+            --neon-accent: #f5d300;
+            --dark-bg: #0a0a0a;
+            --dark-card: #121212;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* استایل هدر و نوار نئونی */
+        header {
+            background-color: rgba(18, 18, 18, 0.8);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--neon-primary);
+            box-shadow: 0 0 10px var(--neon-primary);
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--neon-primary), 0 0 10px var(--neon-primary);
+            color: var(--text-primary);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* استایل منو */
+        nav {
+            margin-top: 15px;
+        }
+        
+        .menu {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .menu-item {
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .menu-item:hover {
+            border-color: var(--neon-secondary);
+            box-shadow: 0 0 8px var(--neon-secondary);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(254, 83, 187, 0.2);
+            border-color: var(--neon-secondary);
+            box-shadow: 0 0 12px var(--neon-secondary);
+        }
+        
+        /* استایل کارت‌ها */
+        .card {
+            background-color: var(--dark-card);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(8, 247, 254, 0.1);
+        }
+        
+        .card-header {
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(8, 247, 254, 0.3);
+            color: var(--neon-primary);
+            text-shadow: 0 0 3px var(--neon-primary);
+        }
+        
+        /* استایل فرم‌ها */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--neon-primary);
+            box-shadow: 0 0 8px var(--neon-primary);
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--neon-primary);
+            color: black;
+            font-weight: bold;
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 0 15px var(--neon-primary);
+        }
+        
+        .btn-secondary {
+            background-color: var(--neon-secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 0 15px var(--neon-secondary);
+        }
+        
+        /* صفحه لاگین */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(30, 30, 30, 0.9));
+        }
+        
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: var(--dark-card);
+            border: 1px solid var(--neon-primary);
+            box-shadow: 0 0 20px var(--neon-primary);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--neon-primary);
+            text-shadow: 0 0 5px var(--neon-primary);
+        }
+        
+        /* استایل جداول */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background-color: rgba(8, 247, 254, 0.1);
+            color: var(--neon-primary);
+        }
+        
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* افکت‌های نئونی */
+        .neon-text {
+            color: var(--text-primary);
+            text-shadow: 0 0 5px var(--neon-primary), 0 0 10px var(--neon-primary), 0 0 15px var(--neon-primary);
+        }
+        
+        .neon-border {
+            border: 1px solid var(--neon-primary);
+            box-shadow: 0 0 10px var(--neon-primary), inset 0 0 10px var(--neon-primary);
+        }
+        
+        /* صفحه‌بندی */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        .page-item {
+            padding: 8px 15px;
+            border: 1px solid var(--neon-primary);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .page-item.active {
+            background-color: var(--neon-primary);
+            color: black;
+            font-weight: bold;
+        }
+        
+        /* مخفی کردن بخش‌ها */
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        /* واکنش‌گرایی */
+        @media (max-width: 768px) {
+            .menu {
+                flex-direction: column;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- صفحه لاگین -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h2 class="login-header neon-text">ورود به سامانه</h2>
+            <div class="form-group">
+                <label for="username">نام کاربری</label>
+                <input type="text" id="username" placeholder="نام کاربری خود را وارد کنید">
+            </div>
+            <div class="form-group">
+                <label for="password">رمز عبور</label>
+                <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید">
+            </div>
+            <button class="btn-primary" style="width: 100%;" onclick="login()">ورود</button>
+            <div id="loginError" style="color: #ff3366; margin-top: 15px; text-align: center; display: none;">
+                نام کاربری یا رمز عبور اشتباه است
+            </div>
+        </div>
+    </div>
+
+    <!-- پنل اصلی -->
+    <div id="mainPanel" style="display: none;">
+        <header>
+            <div class="container header-content">
+                <div class="logo">سامانه رزرو مهمانسرا</div>
+                <div class="user-info">
+                    <span id="userRoleDisplay">مدیر سیستم</span>
+                    <button class="btn-secondary" onclick="logout()">خروج</button>
+                </div>
+            </div>
+            
+            <div class="container">
+                <nav>
+                    <ul class="menu">
+                        <li class="menu-item active" data-section="dashboard">داشبورد</li>
+                        <li class="menu-item" data-section="reservation">ثبت رزرو</li>
+                        <li class="menu-item" data-section="letters">نامه‌های ارسالی</li>
+                        <li class="menu-item" data-section="settings">تنظیمات</li>
+                        <li class="menu-item" data-section="reports">گزارش‌ها</li>
+                        <li class="menu-item" data-section="calendar">تقویم رزرو</li>
+                        <li class="menu-item" data-section="archive">بایگانی</li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- داشبورد -->
+            <section id="dashboard" class="section active">
+                <div class="card">
+                    <h3 class="card-header">خلاصه وضعیت</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div style="background: linear-gradient(135deg, rgba(8, 247, 254, 0.1), rgba(254, 83, 187, 0.1)); padding: 15px; border-radius: 8px;">
+                            <h4>رزروهای فعال</h4>
+                            <p style="font-size: 24px; margin-top: 10px;">۱۲</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, rgba(8, 247, 254, 0.1), rgba(254, 83, 187, 0.1)); padding: 15px; border-radius: 8px;">
+                            <h4>تعداد مهمانان</h4>
+                            <p style="font-size: 24px; margin-top: 10px;">۳۶</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, rgba(8, 247, 254, 0.1), rgba(254, 83, 187, 0.1)); padding: 15px; border-radius: 8px;">
+                            <h4>مهمانسراهای فعال</h4>
+                            <p style="font-size: 24px; margin-top: 10px;">۳</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-header">وضعیت سرایدارها</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>نام سرایدار</th>
+                                <th>مهمانسرا</th>
+                                <th>وضعیت</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>محمد رضایی</td>
+                                <td>مهمانسرای مرکزی</td>
+                                <td><span style="color: #00ff00;">●</span> فعال</td>
+                            </tr>
+                            <tr>
+                                <td>علی محمدی</td>
+                                <td>مهمانسرای غرب</td>
+                                <td><span style="color: #ff3366;">●</span> غیرفعال</td>
+                            </tr>
+                            <tr>
+                                <td>فاطمه حسینی</td>
+                                <td>مهمانسرای شرق</td>
+                                <td><span style="color: #00ff00;">●</span> فعال</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ثبت رزرو -->
+            <section id="reservation" class="section">
+                <div class="card">
+                    <h3 class="card-header">ثبت درخواست رزرو جدید</h3>
+                    <form id="reservationForm">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                            <div class="form-group">
+                                <label for="guestName">نام و نام خانوادگی مهمان</label>
+                                <input type="text" id="guestName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="guestCount">تعداد نفرات</label>
+                                <input type="number" id="guestCount" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="suiteNumber">شماره سوئیت</label>
+                                <input type="text" id="suiteNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="guesthouse">مهمانسرا</label>
+                                <select id="guesthouse" required>
+                                    <option value="">انتخاب کنید</option>
+                                    <option value="1">مهمانسرای مرکزی</option>
+                                    <option value="2">مهمانسرای غرب</option>
+                                    <option value="3">مهمانسرای شرق</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkinDate">تاریخ ورود (شمسی)</label>
+                                <input type="text" id="checkinDate" placeholder="1402/01/15" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutDate">تاریخ خروج (شمسی)</label>
+                                <input type="text" id="checkoutDate" placeholder="1402/01/17" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkinTime">ساعت ورود</label>
+                                <input type="time" id="checkinTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutTime">ساعت خروج</label>
+                                <input type="time" id="checkoutTime" required>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-primary" style="margin-top: 20px;" onclick="generateLetter()">ثبت و تولید نامه</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- نامه‌های ارسالی -->
+            <section id="letters" class="section">
+                <div class="card">
+                    <h3 class="card-header">نامه‌های ارسالی</h3>
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        <input type="text" placeholder="جستجو بر اساس نام مهمان">
+                        <input type="text" placeholder="تاریخ شروع (شمسی)" style="width: 150px;">
+                        <input type="text" placeholder="تاریخ پایان (شمسی)" style="width: 150px;">
+                        <button class="btn-primary">جستجو</button>
+                        <button class="btn-secondary">خروجی Excel</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>نام مهمان</th>
+                                <th>تاریخ رزرو</th>
+                                <th>شماره سوئیت</th>
+                                <th>مهمانسرا</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>محمد احمدی</td>
+                                <td>1402/01/12</td>
+                                <td>۱۰۲</td>
+                                <td>مرکزی</td>
+                                <td>
+                                    <i class="fas fa-eye" style="cursor: pointer; margin-left: 10px;"></i>
+                                    <i class="fas fa-edit" style="cursor: pointer; margin-left: 10px;"></i>
+                                    <i class="fas fa-trash" style="cursor: pointer; color: #ff3366;"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>فاطمه زارعی</td>
+                                <td>1402/01/10</td>
+                                <td>۲۰۴</td>
+                                <td>غرب</td>
+                                <td>
+                                    <i class="fas fa-eye" style="cursor: pointer; margin-left: 10px;"></i>
+                                    <i class="fas fa-edit" style="cursor: pointer; margin-left: 10px;"></i>
+                                    <i class="fas fa-trash" style="cursor: pointer; color: #ff3366;"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <div class="page-item active">1</div>
+                        <div class="page-item">2</div>
+                        <div class="page-item">3</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- سایر بخش‌ها -->
+            <section id="settings" class="section">
+                <div class="card">
+                    <h3 class="card-header">تنظیمات سیستم</h3>
+                    <p>این بخش برای تنظیمات سیستم و مدیریت مهمانسراها است.</p>
+                </div>
+            </section>
+
+            <section id="reports" class="section">
+                <div class="card">
+                    <h3 class="card-header">گزارش‌ها و آمار</h3>
+                    <p>این بخش برای نمایش گزارش‌ها و آمار سیستم است.</p>
+                </div>
+            </section>
+
+            <section id="calendar" class="section">
+                <div class="card">
+                    <h3 class="card-header">تقویم رزرو</h3>
+                    <p>این بخش برای نمایش تقویم رزروها است.</p>
+                </div>
+            </section>
+
+            <section id="archive" class="section">
+                <div class="card">
+                    <h3 class="card-header">بایگانی نامه‌ها</h3>
+                    <p>این بخش برای دسترسی به نامه‌های بایگانی شده است.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // لاگین و مدیریت نقش‌ها
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'abbas' && password === '1335') {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('mainPanel').style.display = 'block';
+                document.getElementById('userRoleDisplay').textContent = 'مدیر سیستم';
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+        
+        function logout() {
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('mainPanel').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+        
+        // مدیریت منو و بخش‌ها
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // حذف کلاس active از همه آیتم‌های منو
+                document.querySelectorAll('.menu-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // اضافه کردن کلاس active به آیتم انتخاب شده
+                this.classList.add('active');
+                
+                // مخفی کردن همه بخش‌ها
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // نمایش بخش مربوطه
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+        
+        // شبیه‌سازی تولید نامه
+        function generateLetter() {
+            alert('نامه با موفقیت تولید شد و برای سرایدار مربوطه ارسال گردید.');
+        }
+    </script>
+</body>
+</html>
